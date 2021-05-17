@@ -137,7 +137,6 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
                       child: Container(
                         width: double.infinity,
                         height: double.infinity,
-                        padding: EdgeInsets.all(12.0),
                         child: _buildFilteredImage(
                           _filter,
                           image,
@@ -158,14 +157,13 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    _buildFilterThumbnail(
-                                        widget.filters[index], image, filename),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
                                     Text(
                                       widget.filters[index].name,
-                                    )
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 5,),
+                                    _buildFilterThumbnail(
+                                        widget.filters[index], image, filename),
                                   ],
                                 ),
                               ),
@@ -200,35 +198,38 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return CircleAvatar(
-                radius: 50.0,
+              return Container(
+                height:100,
+                width: 100,
+                decoration: BoxDecoration(color: Colors.white),
                 child: Center(
                   child: widget.loader,
                 ),
-                backgroundColor: Colors.white,
               );
             case ConnectionState.done:
               if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));
               cachedFilters[filter.name] = snapshot.data;
-              return CircleAvatar(
-                radius: 50.0,
-                backgroundImage: MemoryImage(
+              return Container(
+                height:100,
+                width: 100,
+                decoration: BoxDecoration(color: Colors.white,
+                image:  DecorationImage(image: MemoryImage(
                   snapshot.data as Uint8List,
-                ),
-                backgroundColor: Colors.white,
-              );
+                )),
+              ));
           }
         },
       );
     } else {
-      return CircleAvatar(
-        radius: 50.0,
-        backgroundImage: MemoryImage(
+      return Container(
+          height:100,
+          width: 100,
+          decoration: BoxDecoration(color: Colors.white,
+          image:  DecorationImage(image: MemoryImage(
           cachedFilters[filter.name] as Uint8List,
         ),
-        backgroundColor: Colors.white,
-      );
+      )));
     }
   }
 
